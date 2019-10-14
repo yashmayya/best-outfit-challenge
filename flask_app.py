@@ -60,7 +60,16 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('home_page.html')
+
+    if not current_user.is_authenticated:
+        return render_template('home_page.html', challenge_attempted=False)
+
+    else:
+        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+            return render_template('home_page.html', challenge_attempted=True)
+
+        else:
+            return render_template('home_page.html', challenge_attempted=False)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():

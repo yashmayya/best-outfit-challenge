@@ -43,6 +43,10 @@
                     <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
 
                 {% else %}
+
+                    {% if challenge_attempted %}
+                        <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
+                    {% endif %}
                     <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
                 {% endif %}
             </div>
