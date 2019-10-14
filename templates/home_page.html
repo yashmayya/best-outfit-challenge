@@ -16,13 +16,11 @@
 
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
-                    <li><a href="#">Page 3</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
+                        <li><a href="#">Hello, {{ current_user.username }}!</a></li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
                         <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -31,5 +29,23 @@
                 </ul>
             </div>
         </nav>
+
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Best outfit challenge</h1>
+                <p>
+                    Challenge explanation.
+                </p>
+
+                {% if not current_user.is_authenticated %}
+                    <p>Login to continue to the challenge</p>
+
+                    <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
+
+                {% else %}
+                    <p><a class="btn btn-primary btn-lg" href="#" role="button">Continue to challenge</a></p>
+                {% endif %}
+            </div>
+        </div>
     </body>
 </html>
