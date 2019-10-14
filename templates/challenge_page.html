@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <title>Best outfit challenge</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ url_for('index') }}">Myntra-Jabong</a>
+                </div>
+
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="#">Hello, {{ current_user.username }}!</a></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <form action='.' method="POST">
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <input type="text" class="form-control" id="gender" name="gender" placeholder="Gender (0 for male, 1 for female)">
+
+                        <label for="topchoice">Top choice:</label>
+                        <input type="text" class="form-control" id="topchoice" name="topchoice" placeholder="Enter your top choice">
+
+                        <label for="bottomchoice">Bottom choice:</label>
+                        <input type="text" class="form-control" id="bottomchoice" name="bottomchoice" placeholder="Enter your bottom choice">
+
+                        <label for="footwearchoice">Bottom choice:</label>
+                        <input type="text" class="form-control" id="footwearchoice" name="footwearchoice" placeholder="Enter your footwear choice">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

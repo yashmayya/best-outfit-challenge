@@ -43,7 +43,7 @@
                     <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
 
                 {% else %}
-                    <p><a class="btn btn-primary btn-lg" href="#" role="button">Continue to challenge</a></p>
+                    <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
                 {% endif %}
             </div>
         </div>

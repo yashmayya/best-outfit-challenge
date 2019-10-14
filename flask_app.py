@@ -43,6 +43,16 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return self.username
 
+class UserChoice(db.Model):
+    __tablename__ = "userchoice"
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    gender = db.Column(db.Integer)  #0 is male, 1 is female
+    top_choice = db.Column(db.Integer)
+    bottom_choice = db.Column(db.Integer)
+    footwear_choice = db.Column(db.Integer)
+
+    user = db.relationship('User', foreign_keys=user_id)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -104,6 +114,31 @@ def signup():
 
             if len(request.form['password'])<4:
                 return render_template("signup_page.html", username_error=False, password_error=True, repeated_username=False)
+
+
+@app.route('/challenge/', methods=['GET', 'POST'])
+def challenge():
+    if request.method=='GET':
+        return render_template('challenge_page.html')
+
+    else:
+        if not current_user.is_authenticated:
+            return redirect(url_for('index'))
+
+        user_choice = UserChoice(user=current_user, gender=request.form["gender"], top_choice=request.form["topchoice"], bottom_choice=request.form["bottomchoice"], footwear_choice=request.form["footwearchoice"])
+
+        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+            db.session.commit()
+
+        db.session.add(user_choice)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+
+
+
+
 
 
 
