@@ -12,7 +12,24 @@
                 </div>
             </div>
         </nav>
-
+        
+        {% if repeated_username %}
+            <div class="alert alert-warning" role="alert">
+                Username already exists. Try another one.
+            </div>
+        {% endif %}
+        
+        {% if username_error %}
+            <div class="alert alert-warning" role="alert">
+                Username too short. Must be 4 characters or more.
+            </div>
+        {% endif %}
+        
+        {% if password_error %}
+            <div class="alert alert-warning" role="alert">
+                Password too short. Must be 4 characters or more.
+            </div>
+        {% endif %}
 
         <div class="container">
             <div class="row">

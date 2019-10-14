@@ -81,13 +81,29 @@ def logout():
 def signup():
 
     if request.method=='GET':
-        return render_template('signup_page.html')
+        return render_template('signup_page.html', username_error=False, password_error=False)
 
     else:
-        user = User(username=request.form['username'], password_hash=generate_password_hash(request.form["password"]))
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
+        exists = db.session.query(db.session.query(User).filter_by(username=request.form["username"]).exists()).scalar()
+
+        if exists:
+            return render_template("signup_page.html", username_error=False, password_error=False, repeated_username=True)
+
+        else:
+            if len(request.form['username'])>=4 and len(request.form['password'])>=4:
+                user = User(username=request.form['username'], password_hash=generate_password_hash(request.form["password"]))
+                db.session.add(user)
+                db.session.commit()
+                return redirect(url_for('login'))
+
+            if len(request.form['username'])<4 and len(request.form['password'])<4:
+                return render_template("signup_page.html", username_error=True, password_error=True, repeated_username=False)
+
+            if len(request.form['username'])<4:
+                return render_template("signup_page.html", username_error=True, password_error=False, repeated_username=False)
+
+            if len(request.form['password'])<4:
+                return render_template("signup_page.html", username_error=False, password_error=True, repeated_username=False)
 
 
 
