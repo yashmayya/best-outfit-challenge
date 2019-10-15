@@ -1,0 +1,48 @@
+body, html {
+  height: 100%;
+}
+.container-fluid{
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Make the image responsive */
+.container-fluid img {
+  width: 100%;
+  height: auto;
+}
+
+.col-sm-6 .content {
+  position: relative; /* Position the background text */
+  bottom: 500px /* At the bottom. Use top:0 to append it to the top */ /* Fallback color */
+  background: rgb(0,0,0);
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #ffffff;
+  width: 100%; /* Full width */
+  padding: 15px; /* Some padding */
+}
+
+.vertical-align {
+  letter-spacing: -4px;
+  font-size: 0;
+}
+
+.vertical-align .col-sm-6 {
+  vertical-align: middle;
+  display: inline-block;
+  letter-spacing: 0;
+  font-size: 14px;
+  float: none;
+}
+
+.jumbotron .row > a {
+    display: block;
+}
+
+.jumbotron > .row div a img {
+    max-height: 8000px;
+    max-width: 100%;
+    vertical-align: middle;
+}
+/* Style the button and place it in the middle of the container/image */
