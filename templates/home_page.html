@@ -21,7 +21,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
                         {% if current_user.username == 'admin' %}
-                            <li><a href="#">Admin</a></li>
+                            <li><a href="{{ url_for('admin') }}">Admin</a></li>
                         {% endif %}
 
                         <li><a href="#">Hello, {{ current_user.username }}!</a></li>

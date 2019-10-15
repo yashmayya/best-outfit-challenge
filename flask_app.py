@@ -73,15 +73,17 @@ def index():
 
     else:
         if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+            gender = db.session.query(Variable).filter_by(name="gender").first().value
             winning_top = db.session.query(Variable).filter_by(name="winning_top").first().value
             winning_bottom = db.session.query(Variable).filter_by(name="winning_bottom").first().value
             winning_footwear = db.session.query(Variable).filter_by(name="winning_footwear").first().value
 
+            gender_chosen = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().gender
             top_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().top_choice
             bottom_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().bottom_choice
             footwear_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().footwear_choice
 
-            is_correct_submission = winning_top == top_choice and winning_bottom == bottom_choice and winning_footwear == footwear_choice
+            is_correct_submission = gender == gender_chosen and winning_top == top_choice and winning_bottom == bottom_choice and winning_footwear == footwear_choice
 
             return render_template('home_page.html', challenge_attempted=True, challenge_declared=is_challenge_declared, correct_submission=is_correct_submission)
 
@@ -162,7 +164,56 @@ def challenge():
         return redirect(url_for('index'))
 
 
+@app.route('/admin/', methods=['GET', 'POST'])
+def admin():
+    if request.method=='GET':
+        return render_template('admin_page.html')
+
+    else:
+        gender = request.form["gender"]
+        winning_top = request.form["winning_top"]
+        winning_bottom = request.form["winning_bottom"]
+        winning_footwear = request.form["winning_footwear"]
+        challenge_declared = 0
+
+        if request.form.get("declare_challenge"):
+            challenge_declared = 1
+
+        if db.session.query(db.session.query(Variable).filter_by(name="gender").exists()).scalar():
+            db.session.delete(Variable.query.filter_by(name="gender").first())
+            db.session.commit()
+
+        db.session.add(Variable(name="gender", value=gender))
+        db.session.commit()
+
+        if db.session.query(db.session.query(Variable).filter_by(name="winning_top").exists()).scalar():
+            db.session.delete(Variable.query.filter_by(name="winning_top").first())
+            db.session.commit()
+
+        db.session.add(Variable(name="winning_top", value=winning_top))
+        db.session.commit()
+
+        if db.session.query(db.session.query(Variable).filter_by(name="winning_bottom").exists()).scalar():
+            db.session.delete(Variable.query.filter_by(name="winning_bottom").first())
+            db.session.commit()
+
+        db.session.add(Variable(name="winning_bottom", value=winning_bottom))
+        db.session.commit()
+
+        if db.session.query(db.session.query(Variable).filter_by(name="winning_footwear").exists()).scalar():
+            db.session.delete(Variable.query.filter_by(name="winning_footwear").first())
+            db.session.commit()
+
+        db.session.add(Variable(name="winning_footwear", value=winning_footwear))
+        db.session.commit()
+
+        if db.session.query(db.session.query(Variable).filter_by(name="challenge_declared").exists()).scalar():
+            db.session.delete(Variable.query.filter_by(name="challenge_declared").first())
+            db.session.commit()
+
+        db.session.add(Variable(name="challenge_declared", value=challenge_declared))
+        db.session.commit()
 
 
 
-
+        return redirect(url_for('admin'))
