@@ -20,8 +20,13 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
+                        {% if current_user.username == 'admin' %}
+                            <li><a href="#">Admin</a></li>
+                        {% endif %}
+
                         <li><a href="#">Hello, {{ current_user.username }}!</a></li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
                     {% else %}
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
@@ -51,5 +56,30 @@
                 {% endif %}
             </div>
         </div>
+
+        {% if challenge_declared %}
+            <div class="container">
+                <h3>Challenge results have been declared!</h3>
+
+                {% if current_user.is_authenticated %}
+                    {% if challenge_attempted %}
+                        {% if correct_submission %}
+                            <p>You have won the challenge!</p>
+
+                        {% else %}
+                            <p>Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
+                        {% endif %}
+                    {% else %}
+                        <p>You did not attempt this challenge</p>
+
+                    {% endif %}
+
+                {% else %}
+                    <p>Login to find out if your submission was correct</p>
+
+                {% endif %}
+            </div>
+
+        {% endif %}
     </body>
 </html>

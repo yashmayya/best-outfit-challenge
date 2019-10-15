@@ -54,22 +54,39 @@ class UserChoice(db.Model):
 
     user = db.relationship('User', foreign_keys=user_id)
 
+class Variable(db.Model):
+    __tablename__ = "variables"
+
+    name = db.Column(db.String(128), primary_key=True)
+    value = db.Column(db.Integer)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(username=user_id).first()
 
 @app.route('/')
 def index():
+    is_challenge_declared = db.session.query(Variable).filter_by(name="challenge_declared").first().value
 
     if not current_user.is_authenticated:
-        return render_template('home_page.html', challenge_attempted=False)
+        return render_template('home_page.html', challenge_attempted=False, challenge_declared=is_challenge_declared)
 
     else:
         if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
-            return render_template('home_page.html', challenge_attempted=True)
+            winning_top = db.session.query(Variable).filter_by(name="winning_top").first().value
+            winning_bottom = db.session.query(Variable).filter_by(name="winning_bottom").first().value
+            winning_footwear = db.session.query(Variable).filter_by(name="winning_footwear").first().value
+
+            top_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().top_choice
+            bottom_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().bottom_choice
+            footwear_choice = db.session.query(UserChoice).filter_by(user_id=current_user.id).first().footwear_choice
+
+            is_correct_submission = winning_top == top_choice and winning_bottom == bottom_choice and winning_footwear == footwear_choice
+
+            return render_template('home_page.html', challenge_attempted=True, challenge_declared=is_challenge_declared, correct_submission=is_correct_submission)
 
         else:
-            return render_template('home_page.html', challenge_attempted=False)
+            return render_template('home_page.html', challenge_attempted=False, challenge_declared=is_challenge_declared, correct_submission=False)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -143,8 +160,6 @@ def challenge():
         db.session.add(user_choice)
         db.session.commit()
         return redirect(url_for('index'))
-
-
 
 
 
