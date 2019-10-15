@@ -48,37 +48,38 @@
                     <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
 
                 {% else %}
+                    {% if not challenge_declared %}
+                        {% if challenge_attempted %}
+                            <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
+                        {% endif %}
+                        <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
+                    {% else %}
 
-                    {% if challenge_attempted %}
-                        <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
+                        <h3>Challenge results have been declared!</h3>
+
+                        {% if current_user.is_authenticated %}
+                            {% if challenge_attempted %}
+                                {% if correct_submission %}
+                                    <p>You have won the challenge!</p>
+
+                                {% else %}
+                                    <p>Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
+                                {% endif %}
+                            {% else %}
+                                <p>You did not attempt this challenge</p>
+
+                            {% endif %}
+
+                        {% else %}
+                            <p>Login to find out if your submission was correct</p>
+                        {% endif %}
                     {% endif %}
-                    <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
                 {% endif %}
             </div>
         </div>
 
         {% if challenge_declared %}
-            <div class="container">
-                <h3>Challenge results have been declared!</h3>
 
-                {% if current_user.is_authenticated %}
-                    {% if challenge_attempted %}
-                        {% if correct_submission %}
-                            <p>You have won the challenge!</p>
-
-                        {% else %}
-                            <p>Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
-                        {% endif %}
-                    {% else %}
-                        <p>You did not attempt this challenge</p>
-
-                    {% endif %}
-
-                {% else %}
-                    <p>Login to find out if your submission was correct</p>
-
-                {% endif %}
-            </div>
 
         {% endif %}
     </body>
