@@ -16,6 +16,9 @@
 
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('challengenew') }}">Challenge</a></li>
+                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -52,7 +55,7 @@
                         {% if challenge_attempted %}
                             <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
                         {% endif %}
-                        <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
+                        <p><a class="btn btn-primary btn-lg" href="{{ url_for('challengenew') }}" role="button">Continue to challenge</a></p>
                     {% else %}
 
                         <h3>Challenge results have been declared!</h3>

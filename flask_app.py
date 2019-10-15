@@ -1,7 +1,7 @@
 
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, LoginManager, UserMixin, logout_user, login_required, current_user
 from flask_migrate import Migrate
@@ -217,3 +217,26 @@ def admin():
 
 
         return redirect(url_for('admin'))
+
+
+@app.route('/challengenew/', methods=["GET", "POST"])
+def challengenew():
+
+    if request.method=="GET":
+        return render_template("challengenew_page.html")
+
+    else:
+        if not current_user.is_authenticated:
+            return redirect(url_for('index'))
+
+        user_choice = UserChoice(user=current_user, gender=0, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
+
+        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+            db.session.commit()
+
+        db.session.add(user_choice)
+        db.session.commit()
+
+        return jsonify(dict(redirect=url_for('index')))
+
