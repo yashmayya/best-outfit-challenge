@@ -144,26 +144,6 @@ def signup():
                 return render_template("signup_page.html", username_error=False, password_error=True, repeated_username=False)
 
 
-@app.route('/challenge/', methods=['GET', 'POST'])
-def challenge():
-    if request.method=='GET':
-        return render_template('challenge_page.html')
-
-    else:
-        if not current_user.is_authenticated:
-            return redirect(url_for('index'))
-
-        user_choice = UserChoice(user=current_user, gender=request.form["gender"], top_choice=request.form["topchoice"], bottom_choice=request.form["bottomchoice"], footwear_choice=request.form["footwearchoice"])
-
-        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
-            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
-            db.session.commit()
-
-        db.session.add(user_choice)
-        db.session.commit()
-        return redirect(url_for('index'))
-
-
 @app.route('/admin/', methods=['GET', 'POST'])
 def admin():
     if request.method=='GET':
@@ -219,11 +199,36 @@ def admin():
         return redirect(url_for('admin'))
 
 
-@app.route('/challengenew/', methods=["GET", "POST"])
-def challengenew():
+@app.route('/challenge/', methods=['GET', 'POST'])
+def challenge():
+    return render_template("challenge_page.html")
+
+@app.route('/challengefemale/', methods=["GET", "POST"])
+def challengefemale():
 
     if request.method=="GET":
-        return render_template("challengenew_page.html")
+        return render_template("challengefemale_page.html")
+
+    else:
+        if not current_user.is_authenticated:
+            return redirect(url_for('index'))
+
+        user_choice = UserChoice(user=current_user, gender=1, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
+
+        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+            db.session.commit()
+
+        db.session.add(user_choice)
+        db.session.commit()
+
+        return jsonify(dict(redirect=url_for('index')))
+
+@app.route('/challengemale/', methods=["GET", "POST"])
+def challengemale():
+
+    if request.method=="GET":
+        return render_template("challengemale_page.html")
 
     else:
         if not current_user.is_authenticated:
