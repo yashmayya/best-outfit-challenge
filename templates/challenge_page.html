@@ -1,37 +1,79 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-        <title>Best outfit challenge</title>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Best Outfit Challenge</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+  <link rel="stylesheet" href="MaleFemaleChoice.css">
+  <style>
+    .row.content {height: auto;}
+  </style>
+</head>
 
-    <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ url_for('index') }}">Myntra-Jabong</a>
-                </div>
-
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    {% if current_user.is_authenticated %}
-                        <li><a href="#">Hello, {{ current_user.username }}!</a></li>
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
-                        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                    {% endif %}
-                </ul>
+<body style="background-color:#EDC7B7">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ url_for('index') }}">Myntra-Jabong</a>
             </div>
-        </nav>
-
-        <div class="container">
-            <p class = "tpbutton btn-toolbar text-center">
-                 <a class = "btn navbar-btn btn-primary" href = "{{ url_for('challengemale') }}">Male</a>
-                 <a class = "btn navbar-btn btn-default" href = "{{ url_for('challengefemale') }}">Female</a>
-            </p>
+    
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="active"><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                {% endif %}
+            </ul>
+    
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.username == 'admin' %}
+                        <li><a href="{{ url_for('admin') }}">Admin</a></li>
+                    {% endif %}
+    
+                    <li><a href="#">Hello, {{ current_user.username }}!</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
         </div>
-    </body>
+    </nav>
+  
+  {% if current_user.is_authenticated %}
+      <div class="container">
+        <div class="row content">
+          <div class="col-sm-12">
+            <h1 align="center"> Pick One </h1>
+          </div>
+        </div>
+      </div>
+      
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <div class="row vertical-align">
+                    <div class="col-sm-6" align="center">
+                        <a href="{{ url_for('challengefemale') }}"><img src="{{ url_for('static', filename='img/FemaleChoice.jpg') }}" style="width:550px;height:750px;" >
+                            <div class="content">
+                                <h1 align="center"> Female</h1>
+                            </div>
+                        </a>
+                    </div>
+                
+                    <div class="col-sm-6" align="center">
+                        <a href="{{ url_for('challengemale') }}"><img src="{{ url_for('static', filename='img/MaleChoice.png') }}" style="width:550px;height:750px;">
+                            <div class="content">
+                                <h1 align="center"> Male</h1>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+  {% endif %}
+</body>
+
 </html>
