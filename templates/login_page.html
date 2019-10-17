@@ -2,14 +2,41 @@
     <head>
         <title>Log in</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <style>
+            form {
+                margin: 0 auto;
+                width:500px;
+                outline: 1px solid #767082;
+                padding: 40px 40px 40px 40px;
+            }
+
+            #newuser{
+                margin: 0 auto;
+                width:250px;
+            }
+        </style>
     </head>
 
-    <body>
-        <nav class="navbar navbar-inverse">
+    <body style="background-color:#EEE2DC">
+         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{{ url_for('index') }}">Myntra-Jabong</a>
                 </div>
+
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    {% if current_user.is_authenticated %}
+                        {% if not challenge_declared %}
+                            <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                </ul>
             </div>
         </nav>
 
@@ -35,7 +62,8 @@
             </div>
         </div>
 
-        <div class="container">
+        <br>
+        <div class="container" id="newuser">
             <div class="row">
                 <a href="{{ url_for('signup') }}" class="btn btn-link">New user? Sign up here</a>
             </div>

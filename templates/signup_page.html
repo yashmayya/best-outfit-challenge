@@ -2,29 +2,51 @@
     <head>
         <title>Sign up</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <style>
+            form {
+                margin: 0 auto;
+                width:500px;
+                outline: 1px solid #767082;
+                padding: 40px 40px 40px 40px;
+            }
+        </style>
     </head>
 
-    <body>
+    <body style="background-color:#EEE2DC">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{{ url_for('index') }}">Myntra-Jabong</a>
                 </div>
+
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    {% if current_user.is_authenticated %}
+                        {% if not challenge_declared %}
+                            <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li class="active"><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                </ul>
             </div>
         </nav>
-        
+
         {% if repeated_username %}
             <div class="alert alert-warning" role="alert">
                 Username already exists. Try another one.
             </div>
         {% endif %}
-        
+
         {% if username_error %}
             <div class="alert alert-warning" role="alert">
                 Username too short. Must be 4 characters or more.
             </div>
         {% endif %}
-        
+
         {% if password_error %}
             <div class="alert alert-warning" role="alert">
                 Password too short. Must be 4 characters or more.
@@ -36,10 +58,16 @@
                 <form action="." method="POST">
 
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username">
 
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+
+                    <br>
+                    <ul>
+                        <li>Username should be at least 4 characters long</li>
+                        <li>Password should be at least 4 characters long</li>
+                    </ul>
 
                     <br>
                     <button type="submit" class="btn btn-success">Sign up</button>
