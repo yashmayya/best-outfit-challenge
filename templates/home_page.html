@@ -7,7 +7,7 @@
         <title>Home page</title>
     </head>
 
-    <body>
+    <body style="background-color:#EEE2DC">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -17,7 +17,9 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                        {% if not challenge_declared %}
+                            <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
 
@@ -55,12 +57,20 @@
                         {% if challenge_attempted %}
                             <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
                         {% endif %}
-                        <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
+
+                        {% if current_user.username=='admin' %}
+                            <p class="alert alert-info">This is the admin account. The design selected will be the winning design for the contest.</p>
+                            <br><br>
+                            <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Choose winning design</a></p>
+                        {% else %}
+                            <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
+                        {% endif %}
                     {% else %}
 
                         <h3>Challenge results have been declared!</h3>
 
                         {% if current_user.is_authenticated %}
+
                             {% if challenge_attempted %}
                                 {% if correct_submission %}
                                     <p>You have won the challenge!</p>
@@ -68,10 +78,12 @@
                                 {% else %}
                                     <p>Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
                                 {% endif %}
+
                             {% else %}
                                 <p>You did not attempt this challenge</p>
 
                             {% endif %}
+
 
                         {% else %}
                             <p>Login to find out if your submission was correct</p>

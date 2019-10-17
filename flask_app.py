@@ -150,53 +150,14 @@ def admin():
         return render_template('admin_page.html')
 
     else:
-        gender = request.form["gender"]
-        winning_top = request.form["winning_top"]
-        winning_bottom = request.form["winning_bottom"]
-        winning_footwear = request.form["winning_footwear"]
-        challenge_declared = 0
-
-        if request.form.get("declare_challenge"):
-            challenge_declared = 1
-
-        if db.session.query(db.session.query(Variable).filter_by(name="gender").exists()).scalar():
-            db.session.delete(Variable.query.filter_by(name="gender").first())
-            db.session.commit()
-
-        db.session.add(Variable(name="gender", value=gender))
-        db.session.commit()
-
-        if db.session.query(db.session.query(Variable).filter_by(name="winning_top").exists()).scalar():
-            db.session.delete(Variable.query.filter_by(name="winning_top").first())
-            db.session.commit()
-
-        db.session.add(Variable(name="winning_top", value=winning_top))
-        db.session.commit()
-
-        if db.session.query(db.session.query(Variable).filter_by(name="winning_bottom").exists()).scalar():
-            db.session.delete(Variable.query.filter_by(name="winning_bottom").first())
-            db.session.commit()
-
-        db.session.add(Variable(name="winning_bottom", value=winning_bottom))
-        db.session.commit()
-
-        if db.session.query(db.session.query(Variable).filter_by(name="winning_footwear").exists()).scalar():
-            db.session.delete(Variable.query.filter_by(name="winning_footwear").first())
-            db.session.commit()
-
-        db.session.add(Variable(name="winning_footwear", value=winning_footwear))
-        db.session.commit()
-
         if db.session.query(db.session.query(Variable).filter_by(name="challenge_declared").exists()).scalar():
             db.session.delete(Variable.query.filter_by(name="challenge_declared").first())
             db.session.commit()
 
-        db.session.add(Variable(name="challenge_declared", value=challenge_declared))
+        db.session.add(Variable(name="challenge_declared", value=1))
         db.session.commit()
 
-
-
-        return redirect(url_for('admin'))
+        return redirect(url_for('index'))
 
 
 @app.route('/challenge/', methods=['GET', 'POST'])
@@ -213,16 +174,54 @@ def challengefemale():
         if not current_user.is_authenticated:
             return redirect(url_for('index'))
 
-        user_choice = UserChoice(user=current_user, gender=1, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
+        if current_user.username != 'admin':
+            user_choice = UserChoice(user=current_user, gender=1, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
 
-        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
-            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+            if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+                db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+                db.session.commit()
+
+            db.session.add(user_choice)
             db.session.commit()
 
-        db.session.add(user_choice)
-        db.session.commit()
+            return jsonify(dict(redirect=url_for('index')))
 
-        return jsonify(dict(redirect=url_for('index')))
+        else:
+            gender = 1
+            winning_top = request.form["top_choice"]
+            winning_bottom = request.form["bottom_choice"]
+            winning_footwear = request.form["footwear_choice"]
+
+
+            if db.session.query(db.session.query(Variable).filter_by(name="gender").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="gender").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="gender", value=gender))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_top").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_top").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_top", value=winning_top))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_bottom").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_bottom").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_bottom", value=winning_bottom))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_footwear").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_footwear").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_footwear", value=winning_footwear))
+            db.session.commit()
+            return jsonify(dict(redirect=url_for('index')))
+
 
 @app.route('/challengemale/', methods=["GET", "POST"])
 def challengemale():
@@ -234,14 +233,51 @@ def challengemale():
         if not current_user.is_authenticated:
             return redirect(url_for('index'))
 
-        user_choice = UserChoice(user=current_user, gender=0, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
+        if current_user.username!='admin':
+            user_choice = UserChoice(user=current_user, gender=0, top_choice=request.form["top_choice"], bottom_choice=request.form["bottom_choice"], footwear_choice=request.form["footwear_choice"])
 
-        if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
-            db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+            if db.session.query(db.session.query(UserChoice).filter_by(user_id=current_user.id).exists()).scalar():
+                db.session.delete(UserChoice.query.filter_by(user_id=current_user.id).first())
+                db.session.commit()
+
+            db.session.add(user_choice)
             db.session.commit()
 
-        db.session.add(user_choice)
-        db.session.commit()
+            return jsonify(dict(redirect=url_for('index')))
 
-        return jsonify(dict(redirect=url_for('index')))
+        else:
+            gender = 0
+            winning_top = request.form["top_choice"]
+            winning_bottom = request.form["bottom_choice"]
+            winning_footwear = request.form["footwear_choice"]
 
+
+            if db.session.query(db.session.query(Variable).filter_by(name="gender").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="gender").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="gender", value=gender))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_top").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_top").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_top", value=winning_top))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_bottom").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_bottom").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_bottom", value=winning_bottom))
+            db.session.commit()
+
+            if db.session.query(db.session.query(Variable).filter_by(name="winning_footwear").exists()).scalar():
+                db.session.delete(Variable.query.filter_by(name="winning_footwear").first())
+                db.session.commit()
+
+            db.session.add(Variable(name="winning_footwear", value=winning_footwear))
+            db.session.commit()
+
+            return jsonify(dict(redirect=url_for('index')))
