@@ -5,9 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <title>Home page</title>
+
+        <style>
+            .jumbotron{
+                width:1000px;
+            }
+        </style>
     </head>
 
-    <body style="background-color:#EEE2DC">
+    <body style="background-color:#EEE2DC; background-image: url('https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -44,7 +50,31 @@
             <div class="jumbotron">
                 <h1>Best outfit challenge</h1>
                 <p>
-                    Challenge explanation.
+                    For Participants -
+                    <br>
+                    <ul>
+                        <li>Sign Up as New User and Log In</li>
+                        <li>Select Whether You Want To Choose Outfits for Males or Females</li>
+                        <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
+                        <li>Submit Design</li>
+                        <li>You Can Alter Your Submitted Design As Many Times As You Want</li>
+                        <li>Check Back From Time To Time To See If You Have Won :D</li>
+                    </ul>
+                </p>
+
+                <br>
+
+                <p>
+                    For Administrators -
+                    <br>
+                    <ul>
+                        <li>Log In with - UserName: admin & Password:secretkey</li>
+                        <li>Now, You Need To Select Winning Outfit</li>
+                        <li>Choose Whether Winning Outfit Should Be For Male Or Female Category</li>
+                        <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
+                        <li>Submit Model Design</li>
+                        <li>To declare the results, go to the admin panel from the navbar and click on Declare challenge results</li>
+                    </ul>
                 </p>
 
                 {% if not current_user.is_authenticated %}
@@ -67,16 +97,17 @@
                         {% endif %}
                     {% else %}
 
+                        <br><br>
                         <h3>Challenge results have been declared!</h3>
 
                         {% if current_user.is_authenticated %}
 
                             {% if challenge_attempted %}
                                 {% if correct_submission %}
-                                    <p>You have won the challenge!</p>
+                                    <p class="alert alert-success">You have won the challenge!</p>
 
                                 {% else %}
-                                    <p>Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
+                                    <p class="alert alert-info">Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
                                 {% endif %}
 
                             {% else %}
