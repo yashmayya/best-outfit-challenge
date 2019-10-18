@@ -21,7 +21,7 @@
                 </div>
 
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{url_for('index') }}">Home</a></li>
+                    <li><a href="{{url_for('index') }}">Home</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -41,7 +41,11 @@
             <div class="container">
                 <div class="row">
                     <form action="." method="POST">
-                        <button type="submit" class="btn btn-success btn-lg">Declare challenge results</button>
+                        {% if challenge_declared %}
+                            <button type="submit" class="btn btn-success btn-lg">Reset challenge for a new session</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success btn-lg">Declare challenge results</button>
+                        {% endif %}
                     </form>
                 </div>
             </div>

@@ -23,8 +23,13 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
                     {% if current_user.is_authenticated %}
-                        {% if not challenge_declared %}
-                            <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                        {% if current_user.username != 'admin' %}
+                            {% if not challenge_declared %}
+                                <li><a href="{{ url_for('challenge') }}">Challenge</a></li>
+                            {% endif %}
+
+                        {% else %}
+                            <li><a href="{{ url_for('challenge') }}">Select Winning Outfit</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -32,7 +37,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
                         {% if current_user.username == 'admin' %}
-                            <li><a href="{{ url_for('admin') }}">Admin</a></li>
+                            {% if challenge_declared %}
+                                <li><a href="{{ url_for('admin') }}">Reset challenge </a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('admin') }}">Declare results </a></li>
+                            {% endif %}
                         {% endif %}
 
                         <li><a href="#">Hello, {{ current_user.username }}!</a></li>
@@ -48,7 +57,7 @@
 
         <div class="container">
             <div class="jumbotron">
-                <h1>Best outfit challenge</h1>
+                <h1>Myntra Fashion Design Contest</h1>
                 <p>
                     For Participants -
                     <br>
@@ -68,7 +77,7 @@
                     For Administrators -
                     <br>
                     <ul>
-                        <li>Log In with - UserName: admin & Password:secretkey</li>
+                        <li>Log In with - UserName: admin & Password:123456</li>
                         <li>Now, You Need To Select Winning Outfit</li>
                         <li>Choose Whether Winning Outfit Should Be For Male Or Female Category</li>
                         <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
@@ -91,7 +100,7 @@
                         {% if current_user.username=='admin' %}
                             <p class="alert alert-info">This is the admin account. The design selected will be the winning design for the contest.</p>
                             <br><br>
-                            <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Choose winning design</a></p>
+                            <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Select winning outfit</a></p>
                         {% else %}
                             <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
                         {% endif %}

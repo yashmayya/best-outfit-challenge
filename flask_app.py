@@ -146,15 +146,24 @@ def signup():
 
 @app.route('/admin/', methods=['GET', 'POST'])
 def admin():
+
+    is_challenge_declared = db.session.query(Variable).filter_by(name="challenge_declared").first().value
+
     if request.method=='GET':
-        return render_template('admin_page.html')
+        return render_template('admin_page.html', challenge_declared=is_challenge_declared)
 
     else:
         if db.session.query(db.session.query(Variable).filter_by(name="challenge_declared").exists()).scalar():
             db.session.delete(Variable.query.filter_by(name="challenge_declared").first())
             db.session.commit()
 
-        db.session.add(Variable(name="challenge_declared", value=1))
+        if is_challenge_declared == 1:  #Reset to new challenge session
+            db.session.add(Variable(name="challenge_declared", value=0))
+            db.session.query(UserChoice).delete()
+
+        else:
+            db.session.add(Variable(name="challenge_declared", value=1))
+
         db.session.commit()
 
         return redirect(url_for('index'))
