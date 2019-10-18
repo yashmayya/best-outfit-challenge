@@ -148,9 +148,23 @@ def signup():
 def admin():
 
     is_challenge_declared = db.session.query(Variable).filter_by(name="challenge_declared").first().value
+    gender = db.session.query(Variable).filter_by(name="gender").first().value
+    winning_top = db.session.query(Variable).filter_by(name="winning_top").first().value
+    winning_bottom = db.session.query(Variable).filter_by(name="winning_bottom").first().value
+    winning_footwear = db.session.query(Variable).filter_by(name="winning_footwear").first().value
+    gender_l = ''
+
+    if gender==0:
+        gender_l = 'm'
+    else:
+        gender_l = 'f'
+
+    img1 = gender_l + "t" + str(winning_top+1) + ".jpg"
+    img2 = gender_l + "b" + str(winning_bottom+1) + ".jpg"
+    img3 = gender_l + "s" + str(winning_footwear+1) + ".jpg"
 
     if request.method=='GET':
-        return render_template('admin_page.html', challenge_declared=is_challenge_declared)
+        return render_template('admin_page.html', challenge_declared=is_challenge_declared, imgsrc1=img1, imgsrc2=img2, imgsrc3=img3)
 
     else:
         if db.session.query(db.session.query(Variable).filter_by(name="challenge_declared").exists()).scalar():

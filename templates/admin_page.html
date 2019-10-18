@@ -6,10 +6,19 @@
 
     <style>
         form{
-            margin: 0 auto;
+            display: block;
+              margin-left: auto;
+              margin-right: auto;
             width:500px;
-            padding-top: 400px;
-            padding-left: 100px;
+            padding-top: 100px;
+            padding-left: 132px;
+        }
+
+        img{
+                display: block;
+              margin-left: auto;
+              margin-right: auto;
+
         }
     </style>
 
@@ -36,6 +45,14 @@
                 </ul>
             </div>
         </nav>
+
+        {% if not challenge_declared %}
+            <div class="container"><img src="{{ url_for('static', filename='img/'+imgsrc1) }}" width=200px height=200px></div>
+            <br>
+            <div class="container"><img src="{{ url_for('static', filename='img/'+imgsrc2) }}" width=200px height=200px></div>
+            <br>
+            <div class="container"><img src="{{ url_for('static', filename='img/'+imgsrc3) }}" width=200px height=200px></div>
+        {% endif %}
 
         {% if current_user.is_authenticated and current_user.username == 'admin' %}
             <div class="container">

@@ -10,10 +10,15 @@
             .jumbotron{
                 width:1000px;
             }
+
+            body{
+                background: url('static/img/background-image.jpeg');
+                background-color:#EEE2DC;
+            }
         </style>
     </head>
 
-    <body style="background-color:#EEE2DC; background-image: url('https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')">
+    <body>
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -55,44 +60,45 @@
             </div>
         </nav>
 
-        <div class="container">
-            <div class="jumbotron">
-                <h1>Myntra Fashion Design Contest</h1>
-                <p>
-                    For Participants -
+        {% if not challenge_declared or current_user.username=='admin' %}
+            <div class="container">
+                <div class="jumbotron">
+                    <h1>Myntra Fashion Design Contest</h1>
+                    <p>
+                        For Participants -
+                        <br>
+                        <ul>
+                            <li>Sign Up as New User and Log In</li>
+                            <li>Select Whether You Want To Choose Outfits for Males or Females</li>
+                            <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
+                            <li>Submit Design</li>
+                            <li>You Can Alter Your Submitted Design As Many Times As You Want</li>
+                            <li>Check Back From Time To Time To See If You Have Won :D</li>
+                        </ul>
+                    </p>
+
                     <br>
-                    <ul>
-                        <li>Sign Up as New User and Log In</li>
-                        <li>Select Whether You Want To Choose Outfits for Males or Females</li>
-                        <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
-                        <li>Submit Design</li>
-                        <li>You Can Alter Your Submitted Design As Many Times As You Want</li>
-                        <li>Check Back From Time To Time To See If You Have Won :D</li>
-                    </ul>
-                </p>
 
-                <br>
+                    <p>
+                        For Administrators -
+                        <br>
+                        <ul>
+                            <li>Log In with - UserName: admin & Password:123456</li>
+                            <li>Now, You Need To Select Winning Outfit</li>
+                            <li>Choose Whether Winning Outfit Should Be For Male Or Female Category</li>
+                            <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
+                            <li>Submit Model Design</li>
+                            <li>To declare the results, go to the admin panel from the navbar and click on Declare challenge results</li>
+                        </ul>
+                    </p>
 
-                <p>
-                    For Administrators -
-                    <br>
-                    <ul>
-                        <li>Log In with - UserName: admin & Password:123456</li>
-                        <li>Now, You Need To Select Winning Outfit</li>
-                        <li>Choose Whether Winning Outfit Should Be For Male Or Female Category</li>
-                        <li>Select Outfit By Choosing Clothing (No Need To Click To Select, Just Slide To Chosen Image)</li>
-                        <li>Submit Model Design</li>
-                        <li>To declare the results, go to the admin panel from the navbar and click on Declare challenge results</li>
-                    </ul>
-                </p>
+                    {% if not current_user.is_authenticated %}
+                        <p>Login to continue to the challenge</p>
 
-                {% if not current_user.is_authenticated %}
-                    <p>Login to continue to the challenge</p>
+                        <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
 
-                    <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
+                    {% else %}
 
-                {% else %}
-                    {% if not challenge_declared %}
                         {% if challenge_attempted %}
                             <p class="alert alert-info">You have already attempted the challenge. Attempting it again will overwrite your previous submission</p>
                         {% endif %}
@@ -104,38 +110,40 @@
                         {% else %}
                             <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge') }}" role="button">Continue to challenge</a></p>
                         {% endif %}
-                    {% else %}
 
-                        <br><br>
-                        <h3>Challenge results have been declared!</h3>
+                    {% endif %}
+                </div>
+            </div>
 
-                        {% if current_user.is_authenticated %}
-
-                            {% if challenge_attempted %}
+        {% else %}
+            <div class="container">
+                <div class="jumbotron">
+                    <h3>Challenge results have been declared!</h3>
+                    {% if current_user.is_authenticated %}
+                        {% if challenge_attempted %}
+                            <br>
+                            <div class="container">
                                 {% if correct_submission %}
+                                    <div class="container">
+                                        <img src="{{ url_for('static', filename='img/winner.jpg') }}">
+                                    </div>
+                                    <br>
                                     <p class="alert alert-success">You have won the challenge!</p>
 
                                 {% else %}
                                     <p class="alert alert-info">Unfortunately, your submission wasn't the winning combination. Try your luck again tomorrow!</p>
                                 {% endif %}
-
-                            {% else %}
-                                <p>You did not attempt this challenge</p>
-
-                            {% endif %}
-
+                            </div>
 
                         {% else %}
-                            <p>Login to find out if your submission was correct</p>
+                            <p class="alert alert-info">You did not attempt this challenge</p>
                         {% endif %}
+                    {% else %}
+                        <p>Login to find out if your submission was correct</p>
+                        <p><a class="btn btn-primary btn-lg" href="{{url_for('login') }}" role="button">Login</a></p>
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
-        </div>
-
-        {% if challenge_declared %}
-
-
         {% endif %}
     </body>
 </html>
