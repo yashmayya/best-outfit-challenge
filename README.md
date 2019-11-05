@@ -21,3 +21,4 @@ Increase daily user engagement through gamification by introducing a new contest
 * All clothing belonging to same category i.e Shirt must be aesthetically different. Having a set with five white shirts is not a good idea.
 * The implementation should be extendable to allow more categories i.e watches/purses in the future.
 
+The prototype is hosted at http://unredcoders.pythonanywhere.com/
